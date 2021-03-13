@@ -8,6 +8,8 @@ export interface StockData {
     prevClosing: number;
     open: number;
     value: number;
+    isActive: boolean;
+    isRegular: boolean;
 }
 
 export interface YahooStockData {
@@ -32,6 +34,9 @@ export interface Result {
     postMarketTime:                    number;
     postMarketPrice:                   number;
     postMarketChange:                  number;
+    preMarketPrice:                    number;
+    preMarketChange:                   number;
+    preMarketChangePercent:            number;
     regularMarketChange:               number;
     regularMarketChangePercent:        number;
     regularMarketTime:                 number;
@@ -91,4 +96,10 @@ export interface Result {
     marketState:                       string;
     displayName:                       string;
     symbol:                            string;
+}
+
+export interface CurrencyLookup {
+    rates: { [key: string]: number };
+    base:  string;
+    date:  Date;
 }
