@@ -1,3 +1,3 @@
 # DiscordStockTicker
 
-todo
+Real Time Stock ticker for Discord.
