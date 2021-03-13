@@ -1,5 +1,5 @@
 import Table from 'cli-table3';
-import * as config from './config.json';
+import { config } from "dotenv";
 import axios from 'axios';
 import discord from 'discord.js';
 var strip = require('strip-color');
@@ -7,7 +7,35 @@ import { CurrencyLookup, StockData, YahooStockData } from './model/data.model';
 
 var quoteUrl = "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com&symbols=";
 
-main();
+
+
+var interval = 5;
+var discordToken = "";
+var currency = "EUR";
+var commandPrefix = ".";
+var channelId = "";
+
+var env = config({ path: 'src/.env' });
+if (env.parsed) {
+
+    interval = +env.parsed["interval"];
+    discordToken = env.parsed["discordToken"];
+    currency = env.parsed["currency"];
+    commandPrefix = env.parsed["commandPrefix"];
+    channelId = env.parsed["channelId"];
+    main();
+} else {
+    try {
+        interval = +process.env.interval!;
+        discordToken = process.env.discordToken!;
+        currency = process.env.currency!;
+        commandPrefix = process.env.commandPrefix!;
+        channelId = process.env.channelId!;
+        main();
+    } catch (error) {
+        throw (error)
+    }
+}
 
 var textChannel: discord.TextChannel;
 var tickerMessage: discord.Message;
@@ -31,7 +59,7 @@ var client = new discord.Client();
 
 client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.tag}!`);
-    var channel = client.channels.cache.get(config.channelId);
+    var channel = client.channels.cache.get(channelId);
     if (channel?.isText()) {
         textChannel = channel as discord.TextChannel;
         var stockMsg = (await textChannel.messages.fetch({ limit: 100 })).find(e => e.author.id == client.user!.id)
@@ -43,19 +71,19 @@ client.on('ready', async () => {
 });
 
 client.on('message', msg => {
-    if (msg.content[0] == config.commandPrefix) {
+    if (msg.content[0] == commandPrefix) {
         var content = msg.content.substring(1);
         commands.find(e => new RegExp("^" + e.name, "gi").test(content))?.function(msg);
     }
 });
 
-client.login(config.discordToken);
+client.login(discordToken);
 
 async function main() {
     console.log("Starting...")
 
     // only if discord message is set
-    setInterval(updateStockInformation, 1000 * config.interval);
+    setInterval(updateStockInformation, 1000 * interval);
 }
 
 // commands
@@ -86,18 +114,18 @@ async function updateStockInformation() {
     var symbols = symbolList.join(',');
     var url = quoteUrl + symbols;
     try {
-        var msg = "```\nEmpty symbol list. Add a few stocks with " + config.commandPrefix + "add ~Symbol~\n```";
+        var msg = "```\nEmpty symbol list. Add a few stocks with " + commandPrefix + "add ~Symbol~\n```";
         if (symbolList.length > 0) {
             var data = (await axios.get<YahooStockData>(url)).data;
             var stocks: StockData[] = [];
             for (var item of data.quoteResponse.result) {
                 var currencyValue = 1;
                 var stock: StockData;
-                if (item.currency && item.currency?.toUpperCase() != config.currency?.toUpperCase()) {
+                if (item.currency && item.currency?.toUpperCase() != currency?.toUpperCase()) {
                     if (currencyList?.some(e => e.key == item.currency?.toUpperCase()) && currencyList?.find(e => e.key == item.currency?.toUpperCase())!.date.getHours() == new Date().getHours()) {
                         currencyValue = currencyList?.find(e => e.key == item.currency?.toUpperCase())!.value;
                     } else {
-                        currencyValue = (await axios.get<CurrencyLookup>(`https://api.exchangeratesapi.io/latest?base=${item.currency?.toUpperCase()}&symbols=${config.currency.toUpperCase()}`)).data.rates[config.currency.toUpperCase()];
+                        currencyValue = (await axios.get<CurrencyLookup>(`https://api.exchangeratesapi.io/latest?base=${item.currency?.toUpperCase()}&symbols=${currency.toUpperCase()}`)).data.rates[currency.toUpperCase()];
                         currencyList.push({
                             key: item.currency?.toUpperCase(),
                             value: currencyValue,
@@ -213,7 +241,9 @@ async function updateStockInformation() {
         if (tickerMessage) {
             tickerMessage.edit(msg)
         } else {
-            tickerMessage = await textChannel.send(msg);
+            if(textChannel){
+                tickerMessage = await textChannel.send(msg);
+            }
         }
 
     } catch (error) {

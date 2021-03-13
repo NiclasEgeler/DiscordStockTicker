@@ -1,7 +1,0 @@
-{
-    "interval": 5,
-    "discordToken": "abcdefghijklmnop",
-    "currency": "EUR",
-    "commandPrefix": ".",
-    "channelId": "8203623396654141234"
-}
