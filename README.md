@@ -1,6 +1,17 @@
 # DiscordStockTicker
 Real Time Stock ticker for Discord.
 
+# Configuration
+
+```json
+{
+    "interval": 5,
+    "discordToken": "yourDiscordBotToken",
+    "currency": "EUR",
+    "commandPrefix": ".",
+    "channelId": "yourChannelId"
+}
+```
 ## Instalation
 
 1. Clone the repository
@@ -8,6 +19,7 @@ Real Time Stock ticker for Discord.
 3. run `npm i`
 4. run `npx tsc`
 ## Usage
-
-.add `Symbol`
-.remove `Symbol`
+```
+add `Symbol` - Adds a Symbol to the stock ticker.
+remove `Symbol` - Removes a Symbol from the stock ticker.
+```
