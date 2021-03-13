@@ -17,7 +17,6 @@ var channelId = "";
 
 var env = config({ path: 'src/.env' });
 if (env.parsed) {
-
     interval = +env.parsed["interval"];
     discordToken = env.parsed["discordToken"];
     currency = env.parsed["currency"];
@@ -239,7 +238,7 @@ async function updateStockInformation() {
         }
 
         if (tickerMessage) {
-            tickerMessage.edit(msg)
+            await tickerMessage.edit(msg);
         } else {
             if(textChannel){
                 tickerMessage = await textChannel.send(msg);
