@@ -1,0 +1,3 @@
+# DiscordStockTicker
+
+todo
