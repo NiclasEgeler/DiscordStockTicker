@@ -14,6 +14,7 @@ var discordToken = "";
 var currency = "EUR";
 var commandPrefix = ".";
 var channelId = "";
+var color = false;
 
 var env = config({ path: 'src/.env' });
 if (env.parsed) {
@@ -22,6 +23,7 @@ if (env.parsed) {
     currency = env.parsed["currency"];
     commandPrefix = env.parsed["commandPrefix"];
     channelId = env.parsed["channelId"];
+    color = (env.parsed["color"] == 'true');
     main();
 } else {
     try {
@@ -30,6 +32,7 @@ if (env.parsed) {
         currency = process.env.currency!;
         commandPrefix = process.env.commandPrefix!;
         channelId = process.env.channelId!;
+        color = (process.env.color! == 'true');
         main();
     } catch (error) {
         throw (error)
@@ -135,9 +138,11 @@ async function updateStockInformation() {
 
                 stocks.push(createModel(item, currencyValue));
             }
-            msg = "```\n";
-            msg += strip(stocks.reduce((acc, e) => acc + createEntry(e) + '\n', ""));
+            msg = "```" + (color ? 'diff' : '') + "\n";
+            console.log(msg);
+            msg += strip(stocks.reduce((acc, e) => acc + createEntry(e, color) + '\n', ""));
             msg += "```";
+            console.log(msg);
         }
 
         if (tickerMessage) {
@@ -154,7 +159,7 @@ async function updateStockInformation() {
 
 }
 
-function createEntry(item: StockData): string {
+function createEntry(item: StockData, color: boolean): string {
 
     var table = new Table({
         colWidths: [23, 9, 10, 24],
@@ -173,16 +178,20 @@ function createEntry(item: StockData): string {
 
     var changeValue = (item.value - item.prevClosing);
     var icon = changeValue >= 0 ? '↑' : '↓';
+    var lineColor = '';
+    if (color)
+        lineColor = changeValue >= 0 ? '+ ' : '- ';
     var changePercent = ((item.value - item.prevClosing) / item.value * 100);
     var active = '';
     if (item.isActive && item.isRegular)
         active = '● ';
     if (item.isActive && !item.isRegular)
         active = '○ ';
+    var name = item.name ? item.name : '';
 
     table.push(
         [active + item.symbol, 'High:', item.dayHigh.toFixed(2), item.value.toFixed(2)]
-        , [item.name, 'Low:', item.dayLow.toFixed(2), `${icon} ${changeValue.toFixed(2)} (${changePercent.toFixed(2)}%)`]
+        , [(lineColor + name), 'Low:', item.dayLow.toFixed(2), `${icon} ${changeValue.toFixed(2)} (${changePercent.toFixed(2)}%)`]
     );
 
     return table.toString();
