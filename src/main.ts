@@ -139,10 +139,9 @@ async function updateStockInformation() {
                 stocks.push(createModel(item, currencyValue));
             }
             msg = "```" + (color ? 'diff' : '') + "\n";
-            console.log(msg);
             msg += strip(stocks.reduce((acc, e) => acc + createEntry(e, color) + '\n', ""));
             msg += "```";
-            console.log(msg);
+
         }
 
         if (tickerMessage) {
