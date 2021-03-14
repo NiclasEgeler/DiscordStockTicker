@@ -3,7 +3,7 @@ import { config } from "dotenv";
 import axios from 'axios';
 import discord from 'discord.js';
 var strip = require('strip-color');
-import { CurrencyLookup, StockData, YahooStockData } from './model/data.model';
+import { CurrencyLookup, Result, StockData, YahooStockData } from './model/data.model';
 
 var quoteUrl = "https://query1.finance.yahoo.com/v7/finance/quote?lang=en-US&region=US&corsDomain=finance.yahoo.com&symbols=";
 
@@ -81,7 +81,6 @@ client.login(discordToken);
 async function main() {
     console.log("Starting...")
 
-    // only if discord message is set
     setInterval(updateStockInformation, 1000 * interval);
 }
 
@@ -113,7 +112,7 @@ async function updateStockInformation() {
     var symbols = symbolList.join(',');
     var url = quoteUrl + symbols;
     try {
-        var msg = "```\nEmpty symbol list. Add a few stocks with " + commandPrefix + "add ~Symbol~\n```";
+        var msg = "```\nEmpty symbol list. Add a few stocks with " + commandPrefix + "add Symbol\n```";
         if (symbolList.length > 0) {
             var data = (await axios.get<YahooStockData>(url)).data;
             var stocks: StockData[] = [];
@@ -133,120 +132,24 @@ async function updateStockInformation() {
                     }
                 }
 
-                if (item.marketState == "REGULAR") {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.regularMarketPrice * currencyValue,
-                        isActive: true,
-                        isRegular: true
-                    };
-                } else if (item.marketState == "POST" && item.postMarketPrice == 0.0) {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.regularMarketPrice * currencyValue,
-                        isActive: true,
-                        isRegular: false
-                    };
-                } else if (item.marketState == "PRE" && item.preMarketPrice == 0.0) {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.regularMarketPrice * currencyValue,
-                        isActive: false,
-                        isRegular: false
-                    };
-                } else if (item.marketState == "POST") {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.postMarketPrice * currencyValue,
-                        isActive: true,
-                        isRegular: false
-                    };
-                } else if (item.marketState == "PRE") {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.preMarketPrice * currencyValue,
-                        isActive: false,
-                        isRegular: false
-                    };
-                } else if (item.postMarketPrice && item.postMarketPrice != 0.0) {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.postMarketPrice * currencyValue,
-                        isActive: false,
-                        isRegular: false
-                    };
-                } else {
-                    stock = {
-                        symbol: item.symbol,
-                        name: item.longName,
-                        dayHigh: item.regularMarketDayHigh * currencyValue,
-                        dayLow: item.regularMarketDayLow * currencyValue,
-                        w52High: item.fiftyTwoWeekHigh * currencyValue,
-                        w52Low: item.fiftyTwoWeekLow * currencyValue,
-                        prevClosing: item.regularMarketPreviousClose * currencyValue,
-                        open: item.regularMarketOpen * currencyValue,
-                        value: item.regularMarketPrice * currencyValue,
-                        isActive: false,
-                        isRegular: false
-                    };
-                }
-                stocks.push(stock);
+
+                stocks.push(createModel(item, currencyValue));
             }
-            msg = strip("```\n" + stocks.reduce((acc, e) => acc + createEntry(e) + '\n', "") + "```");
+            msg = "```\n";
+            msg += strip(stocks.reduce((acc, e) => acc + createEntry(e) + '\n', ""));
+            msg += "```";
         }
 
         if (tickerMessage) {
             await tickerMessage.edit(msg);
         } else {
-            if(textChannel){
+            if (textChannel) {
                 tickerMessage = await textChannel.send(msg);
             }
         }
 
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 
 }
@@ -278,10 +181,39 @@ function createEntry(item: StockData): string {
         active = '○ ';
 
     table.push(
-        [active + item.symbol, 'Closing:', item.prevClosing.toFixed(2), item.value.toFixed(2)]
-        , [item.name, 'Open:', item.open.toFixed(2), `${icon} ${changeValue.toFixed(2)} (${changePercent.toFixed(2)}%)`]
+        [active + item.symbol, 'High:', item.dayHigh.toFixed(2), item.value.toFixed(2)]
+        , [item.name, 'Low:', item.dayLow.toFixed(2), `${icon} ${changeValue.toFixed(2)} (${changePercent.toFixed(2)}%)`]
     );
 
     return table.toString();
 }
 
+function createModel(item: Result, currencyValue: number): StockData {
+    var stock: StockData = {
+        symbol: item.symbol,
+        name: item.longName,
+        dayHigh: item.regularMarketDayHigh * currencyValue,
+        dayLow: item.regularMarketDayLow * currencyValue,
+        w52High: item.fiftyTwoWeekHigh * currencyValue,
+        w52Low: item.fiftyTwoWeekLow * currencyValue,
+        prevClosing: item.regularMarketPreviousClose * currencyValue,
+        open: item.regularMarketOpen * currencyValue,
+        value: item.regularMarketPrice * currencyValue,
+        isActive: false,
+        isRegular: false
+    };
+
+    if (item.marketState == "REGULAR") {
+        stock.isActive = true;
+        stock.isRegular = true;
+    } else if (item.marketState == "POST" && item.postMarketPrice != 0.0) {
+        stock.isActive = true;
+        stock.value = item.postMarketPrice * currencyValue;
+    } else if (item.marketState == "PRE" && item.preMarketPrice != 0.0) {
+        stock.value = item.preMarketPrice * currencyValue;
+    } else if (item.postMarketPrice && item.postMarketPrice != 0.0) {
+        stock.value = item.postMarketPrice * currencyValue;
+    }
+
+    return stock;
+}
