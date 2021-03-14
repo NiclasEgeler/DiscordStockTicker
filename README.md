@@ -22,3 +22,6 @@ channelId = "yourChannelId"
 add 'Symbol'    - Adds a Symbol to the stock ticker.
 remove 'Symbol' - Removes a Symbol from the stock ticker.
 ```
+
+## Example
+![image](https://user-images.githubusercontent.com/70487423/111054704-df25d680-846e-11eb-83b6-9bff9d0b5f4d.png)
