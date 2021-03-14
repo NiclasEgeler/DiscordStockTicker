@@ -1,5 +1,13 @@
-# DiscordStockTicker
-Real time stock ticker for Discord 📈.
+<h1 align="center">
+    DiscordStockTicker
+</h2>
+<p align="center">
+    Real time stock ticker for Discord 📈.
+</p>
+<p align="center">
+    <img align="center" src="https://user-images.githubusercontent.com/70487423/111054704-df25d680-846e-11eb-83b6-9bff9d0b5f4d.png"/>
+</p>
+
 
 ## Configuration
 ```env
@@ -25,5 +33,3 @@ add 'Symbol'    - Adds a Symbol to the stock ticker.
 remove 'Symbol' - Removes a Symbol from the stock ticker.
 ```
 
-## Example
-![image](https://user-images.githubusercontent.com/70487423/111054704-df25d680-846e-11eb-83b6-9bff9d0b5f4d.png)
