@@ -19,6 +19,6 @@ channelId = "yourChannelId"
 5. run `node ./out/main.js`
 ## Usage
 ```
-add `Symbol` - Adds a Symbol to the stock ticker.
-remove `Symbol` - Removes a Symbol from the stock ticker.
+add 'Symbol'    - Adds a Symbol to the stock ticker.
+remove 'Symbol' - Removes a Symbol from the stock ticker.
 ```
