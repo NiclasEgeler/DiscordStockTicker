@@ -157,7 +157,7 @@ async function updateStockInformation() {
 function createEntry(item: StockData): string {
 
     var table = new Table({
-        colWidths: [23, 11, 10, 25],
+        colWidths: [23, 9, 10, 24],
         chars: {
             'top': '', 'top-mid': '', 'top-left': '', 'top-right': ''
             , 'bottom': '─', 'bottom-mid': '', 'bottom-left': '', 'bottom-right': ''
