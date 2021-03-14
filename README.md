@@ -2,13 +2,13 @@
 Real time stock ticker for Discord 📈.
 
 ## Configuration
-```
-interval = 5                        // interval in seconds
-discordToken = "yourToken"          // your discord bot token
-currency = "EUR"                    // ISO 4217 3-digit currency code
-commandPrefix = "."                 // discord command prefix
-channelId = "yourChannelId"         // discord channel id
-color = "false"                     // color setting using Highlight.js diff
+```env
+interval = 5                        # interval in seconds
+discordToken = "yourToken"          # your discord bot token
+currency = "EUR"                    # ISO 4217 3-digit currency code
+commandPrefix = "."                 # discord command prefix
+channelId = "yourChannelId"         # discord channel id
+color = "false"                     # color setting using Highlight.js diff
 ```
 
 ## Installation
