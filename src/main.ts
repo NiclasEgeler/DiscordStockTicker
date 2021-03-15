@@ -92,10 +92,14 @@ async function add(msg: discord.Message) {
     var part = msg.content.split(' ');
     if (part.length == 2) {
         var symbol = part[1].toUpperCase();
-        var res = (await axios.get<YahooStockData>(quoteUrl + symbol)).data;
+        try {
+            var res = (await axios.get<YahooStockData>((quoteUrl + symbol))).data;
         if (res.quoteResponse.result.length == 1) {
             symbolList.push(symbol);
         }
+        } catch (error) {
+            console.log(error.message);
+        }        
     }
     msg.delete();
 }
@@ -153,7 +157,7 @@ async function updateStockInformation() {
         }
 
     } catch (error) {
-        console.log(error);
+        console.log(error.message);
     }
 
 }
@@ -214,10 +218,10 @@ function createModel(item: Result, currencyValue: number): StockData {
     if (item.marketState == "REGULAR") {
         stock.isActive = true;
         stock.isRegular = true;
-    } else if (item.marketState == "POST" && item.postMarketPrice != 0.0) {
+    } else if (item.marketState == "POST" && item.postMarketPrice && item.postMarketPrice != 0.0) {
         stock.isActive = true;
         stock.value = item.postMarketPrice * currencyValue;
-    } else if (item.marketState == "PRE" && item.preMarketPrice != 0.0) {
+    } else if (item.marketState == "PRE" && item.preMarketPrice && item.preMarketPrice != 0.0) {
         stock.value = item.preMarketPrice * currencyValue;
     } else if (item.postMarketPrice && item.postMarketPrice != 0.0) {
         stock.value = item.postMarketPrice * currencyValue;
