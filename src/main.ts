@@ -225,6 +225,8 @@ function createModel(item: Result, currencyValue: number): StockData {
         stock.value = item.preMarketPrice * currencyValue;
     } else if (item.postMarketPrice && item.postMarketPrice != 0.0) {
         stock.value = item.postMarketPrice * currencyValue;
+    } else if(item.marketState == "POST") {
+        stock.isActive = true;
     }
 
     return stock;
