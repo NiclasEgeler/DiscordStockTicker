@@ -94,12 +94,12 @@ async function add(msg: discord.Message) {
         var symbol = part[1].toUpperCase();
         try {
             var res = (await axios.get<YahooStockData>((quoteUrl + symbol))).data;
-        if (res.quoteResponse.result.length == 1) {
-            symbolList.push(symbol);
-        }
+            if (res.quoteResponse.result.length == 1) {
+                symbolList.push(symbol);
+            }
         } catch (error) {
             console.log(error.message);
-        }        
+        }
     }
     msg.delete();
 }
@@ -127,15 +127,21 @@ async function updateStockInformation() {
                 var currencyValue = 1;
                 var stock: StockData;
                 if (item.currency && item.currency?.toUpperCase() != currency?.toUpperCase()) {
-                    if (currencyList?.some(e => e.key == item.currency?.toUpperCase()) && currencyList?.find(e => e.key == item.currency?.toUpperCase())!.date.getHours() == new Date().getHours()) {
+                    var cur = currencyList?.find(e => e.key == item.currency?.toUpperCase());
+                    if (cur && cur!.date.getHours() == new Date().getHours()) {
                         currencyValue = currencyList?.find(e => e.key == item.currency?.toUpperCase())!.value;
                     } else {
                         currencyValue = (await axios.get<CurrencyLookup>(`https://api.exchangeratesapi.io/latest?base=${item.currency?.toUpperCase()}&symbols=${currency.toUpperCase()}`)).data.rates[currency.toUpperCase()];
-                        currencyList.push({
-                            key: item.currency?.toUpperCase(),
-                            value: currencyValue,
-                            date: new Date()
-                        });
+                        if (cur) {
+                            cur.value = currencyValue;
+                            cur.date = new Date();
+                        }
+                        else
+                            currencyList.push({
+                                key: item.currency?.toUpperCase(),
+                                value: currencyValue,
+                                date: new Date()
+                            });
                     }
                 }
 
@@ -225,7 +231,7 @@ function createModel(item: Result, currencyValue: number): StockData {
         stock.value = item.preMarketPrice * currencyValue;
     } else if (item.postMarketPrice && item.postMarketPrice != 0.0) {
         stock.value = item.postMarketPrice * currencyValue;
-    } else if(item.marketState == "POST") {
+    } else if (item.marketState == "POST") {
         stock.isActive = true;
     }
 
