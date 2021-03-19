@@ -5,7 +5,7 @@
     Real time stock ticker for Discord 📈.
 </p>
 <p align="center">
-    <img align="center" src="https://user-images.githubusercontent.com/70487423/111054704-df25d680-846e-11eb-83b6-9bff9d0b5f4d.png"/>
+    <img align="center" src="https://user-images.githubusercontent.com/70487423/111169810-97549b80-85a3-11eb-9ad0-f775e4398f0f.gif"/>
 </p>
 
 
