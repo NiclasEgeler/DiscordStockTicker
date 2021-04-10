@@ -99,7 +99,7 @@ export interface Result {
 }
 
 export interface CurrencyLookup {
-    rates: { [key: string]: number };
+    quotes: { [key: string]: number };
     base:  string;
     date:  Date;
 }
