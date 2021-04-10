@@ -131,7 +131,7 @@ async function updateStockInformation() {
                     if (cur && cur!.date.getHours() == new Date().getHours()) {
                         currencyValue = currencyList?.find(e => e.key == item.currency?.toUpperCase())!.value;
                     } else {
-                        currencyValue = (await axios.get<CurrencyLookup>(`https://api.xavii.us/latest?base=${item.currency?.toUpperCase()}&symbols=${currency.toUpperCase()}`)).data.rates[currency.toUpperCase()];
+                        currencyValue = (await axios.get<CurrencyLookup>(`https://api.xavii.us/latest?base=${item.currency?.toUpperCase()}&symbols=${currency.toUpperCase()}`)).data.quotes[currency.toUpperCase()];
                         if (cur) {
                             cur.value = currencyValue;
                             cur.date = new Date();
