@@ -11,19 +11,30 @@
 ## Info
 
 Version 2 completely rewritten in **Deno**.
-Now supports Discords new Slash commands *(and more than 9 Stocks)*.
+Now supports Discords new slash commands *(and more than 9 Stocks)*.
 ## Configuration
 ```env
 TOKEN = "yourToken"     # your discord bot token
 CURRENCY = "EUR"        # ISO 4217 3-digit currency code f.e. EUR, USD, ...
 ```
+Requiered build flags:
+</br>
+`--allow-read`
+</br>
+`--allow-env`
+</br>
+`--allow-net`
+</br>
+`--allow-write`
 ## Installation
 
 Download the latest version from the release tab (or build it yourself).
-
+</br>
 Create a `.env` file and provide the needed values as shown above. 
-
+</br>
 Run the program.
+</br>
+Invite your bot (make sure to give it the `application.commands` scope).
 ## Usage
 ```
 /setup 'Role'    - Setup the Ticker in the current Channel. Gives 'Role' permission to use /add and /remove.
