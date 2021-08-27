@@ -2,34 +2,32 @@
     DiscordStockTicker
 </h2>
 <p align="center">
-    Real time stock ticker for Discord 📈.
+    Real time stock ticker for Discord 📈
 </p>
 <p align="center">
     <img align="center" src="https://user-images.githubusercontent.com/70487423/111169810-97549b80-85a3-11eb-9ad0-f775e4398f0f.gif"/>
 </p>
 
+## Info
 
+Version 2 completely rewritten in **Deno**.
+Now supports Discords new Slash commands *(and more than 9 Stocks)*.
 ## Configuration
 ```env
-interval = 5                        # interval in seconds
-discordToken = "yourToken"          # your discord bot token
-currency = "EUR"                    # ISO 4217 3-digit currency code
-commandPrefix = "."                 # discord command prefix
-channelId = "yourChannelId"         # discord channel id
-color = "false"                     # color setting using Highlight.js diff
+TOKEN = "yourToken"     # your discord bot token
+CURRENCY = "EUR"        # ISO 4217 3-digit currency code f.e. EUR, USD, ...
 ```
-
 ## Installation
 
-1. clone the repository
-2. create a .env file
-3. run `npm i`
-4. run `npx tsc`
-5. run `node ./out/main.js`
+Download the latest version from the release tab (or build it yourself).
 
+Create a `.env` file and provide the needed values as shown above. 
+
+Run the program.
 ## Usage
 ```
-add 'Symbol'    - Adds a Symbol to the stock ticker.
-remove 'Symbol' - Removes a Symbol from the stock ticker.
+/setup 'Role'    - Setup the Ticker in the current Channel. Gives 'Role' permission to use /add and /remove.
+/add 'Symbol'    - Adds a Symbol to the stock ticker.
+/remove 'Symbol' - Removes a Symbol from the stock ticker.
 ```
-
+To find a stock symbol go to [Yahoo finance](https://finance.yahoo.com/).
