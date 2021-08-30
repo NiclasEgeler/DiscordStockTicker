@@ -8,14 +8,16 @@ import { ICommandHandler } from "../../types/command.ts";
 
 export let removeHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
+    console.log("remove called");
+
     var symbol = (args[0]! + "");
 
     var msg = "Symbol successfully removed";
 
-    if (storage.symbol.has(symbol) && validateSymbol(symbol)) {
+    if (storage.symbol.has(symbol) && await validateSymbol(symbol)) {
       await storage.symbol.remove(symbol);
     } else {
-      msg = `Error: invalid symbol "${symbol}"`;
+      msg = `Error: invalid symbol \`${symbol}\``;
     }
 
     await sendInteractionResponse(id, token, {

@@ -22,22 +22,10 @@ export let handlers: EventHandlers = {
     }
   },
 
-  // todo: remove
-  messageCreate(m) {
-    console.log("got a message");
-    discord.test(m.guildId!);
-  },
-
-  interactionGuildCreate(g) {
-    console.log("got guild interaction");
-  },
-
   async interactionCreate(
     data: Interaction,
     member?: DiscordenoMember | undefined,
   ) {
-    console.log("got interaction");
-
     if (!data.data) {
       return;
     }
@@ -63,3 +51,4 @@ export let handlers: EventHandlers = {
     );
   },
 };
+

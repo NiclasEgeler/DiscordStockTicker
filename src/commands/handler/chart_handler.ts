@@ -7,6 +7,8 @@ import { ICommandHandler } from "../../types/command.ts";
 
 export let chartHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
+    console.log("chart called");
+    
     var symbol = (args[0]! + "");
 
     var msg = "Coming soon...";

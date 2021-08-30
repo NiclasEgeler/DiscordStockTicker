@@ -14,21 +14,6 @@ export let stockTicker = {
   running: false,
   setup: false,
 
-  //todo remove
-  async add(symbol: string) {
-    // if (
-    //   //!await storage.has("symbol", symbol) &&
-    //   (await validateSymbol(symbol))
-    // ) {
-    //   // await storage.set("symbol", symbol, symbol);
-    // }
-    await storage.symbol.add(symbol);
-  },
-  //todo remove
-  async remove(symbol: string) {
-    await storage.symbol.remove(symbol);
-  },
-
   async start() {
     if (!this.running) {
       log.info("Starting ticker");

@@ -11,16 +11,14 @@ export let addHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
     var symbol = (args[0]! + "");
 
-    // todo: remove
-    var roles = cache.guilds.get(BigInt(guildId))?.roles!;
-    console.log(roles.find((e) => e.name == "@everyone"));
+    console.log("add called " + symbol);
 
-    var msg = `Symbol "${symbol}" successfully added`;
+    var msg = `Symbol \`${symbol}\` successfully added`;
 
-    if (validateSymbol(symbol)) {
+    if (await validateSymbol(symbol)) {
       await storage.symbol.add(symbol);
     } else {
-      msg = `Error: invalid symbol "${symbol}"`;
+      msg = `Error: invalid symbol \`${symbol}\``;
     }
 
     await sendInteractionResponse(id, token, {

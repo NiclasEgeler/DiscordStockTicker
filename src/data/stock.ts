@@ -7,7 +7,7 @@ import { getRate } from "./currency.ts";
  * Query information about last tick for `symbols`
  */
 export async function tickSymbols(
-  symbols: string[]
+  symbols: string[],
 ): Promise<StockData[]> {
   var result = await rest.get<YahooStockData>(endpoint.YAHOO_STOCK(symbols));
   var ret: StockData[] = [];
@@ -37,8 +37,11 @@ export async function stockInfo(
 }
 
 export async function validateSymbol(symbol: string): Promise<boolean> {
-  // Todo: implement
-  return true;
+  var result = await rest.get<YahooStockData>(
+    endpoint.YAHOO_STOCK([symbol.toUpperCase()]),
+  );
+  return ((result?.quoteResponse?.result.length! > 0) &&
+    (!!result?.quoteResponse.result[0].currency));
 }
 
 function mapToStockModel(info: Result, rate: number): StockData {
