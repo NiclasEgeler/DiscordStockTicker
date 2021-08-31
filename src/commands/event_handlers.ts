@@ -11,7 +11,6 @@ import { Command } from "../types/command.ts";
 import { commandHandler } from "./command_handler.ts";
 import { discord } from "../discord/discord.ts";
 
-// Todo: Some sort of command lookup? with arg parsing? and permission?
 
 export let handlers: EventHandlers = {
   async ready() {
