@@ -47,7 +47,7 @@ export async function validateSymbol(symbol: string): Promise<boolean> {
 function mapToStockModel(info: Result, rate: number): StockData {
   var stock: StockData = {
     symbol: info.symbol,
-    name: info.longName,
+    name: info.longName ? info.longName : info.shortName,
     dayHigh: info.regularMarketDayHigh * rate,
     dayLow: info.regularMarketDayLow * rate,
     w52High: info.fiftyTwoWeekHigh * rate,

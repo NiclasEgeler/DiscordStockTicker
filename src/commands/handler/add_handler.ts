@@ -11,8 +11,6 @@ export let addHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
     var symbol = (args[0]! + "");
 
-    console.log("add called " + symbol);
-
     var msg = `Symbol \`${symbol}\` successfully added`;
 
     if (await validateSymbol(symbol)) {

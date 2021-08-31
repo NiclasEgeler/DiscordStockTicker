@@ -11,7 +11,6 @@ import { ICommandHandler } from "../../types/command.ts";
 
 export let setupHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
-    console.log("setup called");
 
     var roleId: string = args[0]!;
     var channelSet = await discord.hasChannelSet();

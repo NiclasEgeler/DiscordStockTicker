@@ -40,9 +40,3 @@ await startBot({
   log.error("Failed to start discord bot");
   Deno.exit(-1);
 });
-
-// console.log(await getRate("EUR", "USD"));
-// console.log(await getRate("EUR", "USD"));
-// console.log(await getRate("EUR", "HKD"));
-// console.log(await getRate("ERUR", "USD"));
-// console.log(await getRate("USD", "EUR"));

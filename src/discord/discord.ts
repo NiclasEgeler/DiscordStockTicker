@@ -1,22 +1,23 @@
 import {
   cache,
   createSlashCommand,
+  deleteMessage,
   deleteSlashCommand,
   DiscordApplicationCommandPermissionTypes,
+  editMessage,
   editSlashCommandPermissions,
   getSlashCommands,
   log,
+  sendMessage,
 } from "../../deps.ts";
 import { storage } from "../storage/storage.ts";
 import { commands } from "./commands.ts";
 
 export let discord = {
   async createDiscordMessages(contents: string[]) {
-    var messages = await storage.discord.getMessages();
-
-    await createNewMessages(contents, messages);
-    await removeUnusedMessages(contents, messages);
-    await updateMessages(contents, messages);
+    await removeUnusedMessages(contents);
+    await updateMessages(contents);
+    await createNewMessages(contents);
   },
 
   async createDiscordSlashCommands() {
@@ -69,33 +70,47 @@ export let discord = {
 
 // todo: implement!
 
-async function createNewMessages(contents: string[], messages: string[]) {
-  for (var i = messages.length + 1; i < contents.length; i++) {
-    createMessage(contents[i]);
-    return;
+async function createNewMessages(contents: string[]) {
+  var messages = await storage.discord.getMessages();
+  for (var i = messages.length; i < contents.length; i++) {
+    await createMessage(contents[i]);
   }
 }
 
-async function removeUnusedMessages(contents: string[], messages: string[]) {
-  for (var i = messages.length; i > contents.length; i--) {
-    deleteMessage(messages[i]);
-    return;
+async function removeUnusedMessages(contents: string[]) {
+  var messages = await storage.discord.getMessages();
+  for (var i = messages.length; contents.length < i; i--) {
+    await removeMessage(messages[i - 1]);
   }
 }
 
-async function updateMessages(contents: string[], messages: string[]) {
-  for (var i = 0; i < contents.length; i++) {
-    updateMessage(contents[i], messages[i]);
+async function updateMessages(contents: string[]) {
+  var messages = await storage.discord.getMessages();
+  for (var i = 0; i < messages.length; i++) {
+    await updateMessage(contents[i], messages[i]);
   }
 }
 
-async function deleteMessage(messageId: string) {
-  // todo: implement
+async function removeMessage(messageId: string) {
+  await deleteMessage(
+    BigInt(await storage.discord.getChannelId()! as string),
+    BigInt(messageId),
+  );
+  await storage.discord.removeMessage(messageId);
 }
+
 async function createMessage(content: string) {
-  // todo: implement
+  var msg = await sendMessage(
+    BigInt(await storage.discord.getChannelId()! as string),
+    content,
+  );
+  await storage.discord.addMessage(msg.id + "");
 }
 
 async function updateMessage(content: string, messageId: string) {
-  // todo: implement
+  await editMessage(
+    BigInt(await storage.discord.getChannelId()! as string),
+    BigInt(messageId),
+    content,
+  );
 }

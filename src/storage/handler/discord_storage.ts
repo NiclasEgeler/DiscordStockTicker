@@ -28,6 +28,13 @@ export let discordStorage = {
     await messageCol.insertOne({ messageRef: id });
   },
 
+  async removeMessage(id: string) {
+    if (messageCache.has(id)) {
+      messageCache.delete(id);
+      await messageCol.deleteOne((e) => e.messageRef == id);
+    }
+  },
+
   async updateChannelAndRoleId(chId: string, roId: string) {
     if (channelId) {
       var dbId = await channelCol.findOne((e) => true).id;
@@ -42,6 +49,6 @@ export let discordStorage = {
     }
     channelId = chId;
     roleId = roId;
-    await channelCol.insertOne({ channelId: roId, roleId: roId });
+    await channelCol.insertOne({ channelId: chId, roleId: roId });
   },
 };

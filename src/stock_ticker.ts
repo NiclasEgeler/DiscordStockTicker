@@ -35,7 +35,6 @@ export let stockTicker = {
   async tick() {
     var res = await tickSymbols(await storage.symbol.getAll());
     var contents = formatStocksInChunks(res, 9);
-    // contents.forEach(e => console.log(e));
     discord.createDiscordMessages(contents);
   },
 };
