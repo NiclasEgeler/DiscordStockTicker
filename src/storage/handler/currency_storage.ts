@@ -16,5 +16,6 @@ export let currencyStorage = {
   },
 
   remove(key: string) {
+    currency.delete(key);
   },
 };

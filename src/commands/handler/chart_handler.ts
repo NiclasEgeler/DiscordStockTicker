@@ -7,10 +7,10 @@ import { ICommandHandler } from "../../types/command.ts";
 
 export let chartHandler: ICommandHandler = {
   async handle(id, token, channelId, guildId, member, args) {
-    
     var symbol = (args[0]! + "");
 
     var msg = "Coming soon...";
+    
     var isPrivate = true;
 
     await sendInteractionResponse(id, token, {
