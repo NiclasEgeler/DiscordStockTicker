@@ -26,6 +26,11 @@ Requiered build flags:
 `--allow-net`
 </br>
 `--allow-write`
+</br>
+```bash
+deno compile --allow-read --allow-env --allow-net --allow-write --target x86_64-pc-windows-msvc --output ticker_windows_x86_64 main.ts
+deno compile --allow-read --allow-env --allow-net --allow-write --target x86_64-unknown-linux-gnu --output ticker_linux_x86_64 main.ts
+```
 ## Installation
 
 Download the latest version from the release tab (or build it yourself).
