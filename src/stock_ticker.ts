@@ -1,5 +1,5 @@
 import { log } from "../deps.ts";
-import { tickSymbols, validateSymbol } from "./data/stock.ts";
+import { tickSymbols } from "./data/stock.ts";
 import { discord } from "./discord/discord.ts";
 import { storage } from "./storage/storage.ts";
 import { formatStocksInChunks } from "./utils/formatter.ts";

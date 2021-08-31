@@ -1,4 +1,4 @@
-import type { Currency, CurrencyTime } from "../types/currency.ts";
+import type { Currency } from "../types/currency.ts";
 import { endpoint } from "../utils/endpoints.ts";
 import { rest } from "../utils/rest.ts";
 

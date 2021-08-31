@@ -68,8 +68,6 @@ export let discord = {
   },
 };
 
-// todo: implement!
-
 async function createNewMessages(contents: string[]) {
   var messages = await storage.discord.getMessages();
   for (var i = messages.length; i < contents.length; i++) {

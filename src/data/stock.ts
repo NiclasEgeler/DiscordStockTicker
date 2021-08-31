@@ -16,7 +16,7 @@ export async function tickSymbols(
       ret.push(
         await mapToStockModel(
           info,
-          await getRate(info.currency, Deno.env.get("currency")!),
+          await getRate(info.currency, Deno.env.get("CURRENCY")!),
         ),
       );
     }

@@ -1,6 +1,5 @@
 import { env, log, startBot } from "./deps.ts";
 import { handlers } from "./src/commands/event_handlers.ts";
-import { getRate } from "./src/data/currency.ts";
 
 // configure logger
 await log.setup({
