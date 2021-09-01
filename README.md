@@ -7,11 +7,15 @@
 <p align="center">
     <img align="center" src="https://user-images.githubusercontent.com/70487423/111169810-97549b80-85a3-11eb-9ad0-f775e4398f0f.gif"/>
 </p>
+<p align="center">
+    <i >(Randomly selected stocks. This is not a financial advice)</i>
+</p>
 
-## Info
+## Introduction
 
 Version 2 completely rewritten in **Deno**.
 Now supports Discords new slash commands *(and more than 9 Stocks)*.
+
 ## Configuration
 ```env
 TOKEN = "yourToken"     # your discord bot token
